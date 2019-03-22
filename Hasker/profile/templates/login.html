@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block header %}
+{% load static %}
+<!--<link rel='stylesheet' href="{% static 'profile/css/login.css' %}" />-->
+{% endblock %}
+
+{% block content %}
+{% if not user %}
+    <div class="row justify-content-center">
+     <div class="col-4 text-center">
+      <form action="/login/" method = 'post'>
+        {% csrf_token %}
+          <fieldset class="form-group">
+            <input type = "text" placeholder = "Username" name = "login" class="form-control">
+            <br>
+            <input type = "password" placeholder = "Password" name = "password" class="form-control">
+            <br>
+          </fieldset>
+      <input type ="submit" class = "btn btn-primary w-50" value = "Login">
+     </form>
+    </div>
+    </div>
+
+    {% if login_failed %}
+        <div class="row justify-content-center">
+            <div class="failed_animation">
+                <p>Username or password is incorrect. Please try again.</p>
+            </div>
+        </div>
+    {% endif %}
+{% else %}
+
+<div class="row justify-content-center">
+    <div class="col-4 mt-5">
+        <a class="btn btn-danger w-100" href="/logout" role="button">Logout</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

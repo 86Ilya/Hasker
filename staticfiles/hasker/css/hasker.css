@@ -1,0 +1,49 @@
+.tags_field__input {
+  display: inline-block;
+  height: 1em;
+  max-height: 1.5em;
+  line-height: 1em; 
+  /* width: 100px; */
+  /* min-width: 10px; */
+}
+
+.tags_field__input:focus {
+    outline: 0px solid transparent;
+}
+
+.ask_form__text_input{
+  height: 8em;
+  min-width: 100%;
+}
+
+.tags_field{
+border: 1px solid gray;
+border-radius: 5px;
+}
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content div {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content div:hover {background-color: #f1f1f1}
+

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Ask question{% endblock %}
+
+{% block header %}
+{% load static %}
+<script type="text/javascript" src='{% static "hasker/js/ask_question.js" %}'></script>
+<link rel='stylesheet' href="{% static 'hasker/css/hasker.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-8">
+
+
+        <form id="ask_form" action="/ask/" method='post'>
+            {% csrf_token %}
+
+            <fieldset class="form-group">
+                <div class="h4">Question header</div>
+                {{form.header}}
+                <br>
+                <div class="h4">Text</div>
+                {{form.content}}
+                {{form.tags}}
+            </fieldset>
+        </form>
+        <div class="h3">Tags</div>
+            <!-- Field with tags -->
+            <div class="w-50 tags_field">
+              <!--non editiable-->
+              <div id="tags_field__added" class="d-inline"></div>
+              <!--editable-->
+              <div id="tags_field__input" contenteditable="True" class="tags_field__input"></div>
+              <div class="dropdown">
+                <div class="dropdown-content">
+                </div>
+              </div>
+            </div>
+        <div class="btn btn-primary w-50 mt-3" id="ask_button">Ask!</div>
+    </div>
+</div>
+
+{% endblock %}

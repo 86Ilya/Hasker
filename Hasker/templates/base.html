@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    <link rel='stylesheet' href="{% static 'vendor/bootstrap.min.css' %}" />
+    <link rel='stylesheet' href="{% static 'css/base.css' %}" />
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <script type="text/javascript" src='{% static "hasker/js/search.js" %}'></script>
+    <title>{% block title %}Hasker{% endblock %}</title>
+    {% block header %}
+
+    {% endblock %}
+  </head>
+  <div class="container">
+    <div class="row pt-4 h-100">
+    <div class="h2 col-2 account_operations_div__home_link"><a href="/">Hasker</a></div>
+
+        <div class="col-6 my-auto">
+            <form method="POST" action="/search/" id="form_search">
+                {% csrf_token %}
+                    <div class="input-group w-100">
+                        <input class="form-control py-2 border-right-0 border" placeholder="search..." type="search" value="" id="form_search__input">
+                        <span class="input-group-append">
+                            <button id="form_search__button" class="btn btn-outline-secondary border-left-0 border" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                          </span>
+                    </div>
+
+                <!--<fieldset class="form-group">-->
+                    <!--<input type="search" name="Search" class="form-control round-corners">-->
+                <!--</fieldset>-->
+            </form>
+        </div>
+        {% if user %}
+        <div class="col-4 justify-content-end d-flex">
+            <div class="row">
+                <div class="col-6 justify-content-end d-flex">
+                    <img src="{{user.avatar.url}}" class="img-thumbnail" style="width: 50px"/>
+                </div>
+                <div class="col-6">
+                    <a href="/settings">{{user.username}}</a>
+                    <br/>
+                    <a href="/logout/"><img src="/media/exit32.png"/></a>
+
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <div class="col-2 offset-2">
+            <a href="/login"><div class="btn btn-primary">login</div></a>
+            <a href="/signup"><div class="btn btn-primary">sign up</div></a>
+        </div>
+
+        {% endif %}
+
+    </div>
+  </div>
+  <hr/>
+ </div>
+
+  <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-10 mt-1">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+            <div class="col-2 mt-5">
+                <div class="row">
+                   <div class="col-12">
+                       {% if user %}
+                        <a href="/ask"><div class="btn btn-primary w-100">New question</div></a>
+                       {% endif %}
+                       <div class="h3 mt-4">Trending</div>
+                   </div>
+                </div>
+               {% for question in trending_questions %}
+               <div class="row mt-1">
+                  <div class="col-2 mx-auto">
+                      <div class="badge badge-secondary">{{question.get_rating}}</div>
+                  </div>
+                   <div class="col-10 no_link_behaviour"><a href="/question{{question.id}}/">{{question.header}}</a></div>
+               </div>
+               {% endfor %}
+            </div>
+        </div>
+    </div>
+
+  </body>
+
+
+{% block scripts %}
+{% endblock %}
+
+</html>

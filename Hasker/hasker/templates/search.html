@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+
+{% block header %}
+{% load static %}
+<link rel='stylesheet' href="{% static 'css/base.css' %}" />
+{% endblock %}
+
+{% block content %}
+{% load filters %}
+<div class="h2">{{search_header}}</div>
+{% for question in questions %}
+<hr/>
+<div class="row">
+   <div class="col-2">
+      <div class="row">
+         <div class="col-6 text-center">
+             <div>{{question.get_rating}}</div>
+             <div>Votes</div>
+         </div>
+         <div class="col-6 text-center">
+             <div>{{question.get_answers.count}}</div>
+             <div>Answers</div>
+         </div>
+      </div>
+   </div>
+   <div class="col-6 no_link_behaviour">
+      <a href="/question{{question.id}}">
+          <div class="h3">{{question.header}}</div>
+      </a>
+      {% for tag in question.get_tags %}
+      <a href="/tag/{{tag.tag_name}}/">
+            <div class="badge badge-info">{{tag.tag_name}}</div>
+      </a>
+      {% endfor %}
+   </div>
+    <div class="col-2">
+      <div class="h6">{{question.author.username}}</div>
+      <div class="small">{{question.creation_date|get_due_date_string}}</div>
+    </div>
+
+</div>
+{% endfor %}
+{% include 'pagination.html' %}
+{% endblock %}

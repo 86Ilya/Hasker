@@ -1,0 +1,23 @@
+version: '2.0'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: ./build/db_service/Dockerfile
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  web:
+    build:
+      context: .
+      dockerfile: ./build/hasker_service/Dockerfile
+    command: bash /opt/hasker/build/hasker_service/fire.sh
+    volumes:
+      - .:/opt/hasker
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

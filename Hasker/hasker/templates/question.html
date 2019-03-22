@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Question{% endblock %}
+
+{% block header %}
+{% load static %}
+<script type="text/javascript" src='{% static "hasker/js/vote.js" %}'></script>
+<script type="text/javascript" src='{% static "hasker/js/add_star.js" %}'></script>
+{% endblock %}
+
+{% block content %}
+
+{% load filters %}
+<div class="row justify-content-center">
+
+    <div class="col-2 text-right align-self-center">
+    <!--<div class="col-2 text-right">-->
+        {% if user %}
+        <i class="fas fa-angle-up" data-action-vote="/question{{question.id}}/like"></i>
+        {% endif %}
+        <div class="font-weight-bold" id="question_rating">{{question.get_rating}}</div>
+        {% if user %}
+        <i class="fas fa-angle-down" data-action-vote="/question{{question.id}}/dislike"></i>
+        {% endif %}
+    </div>
+    <div class="col-10">
+
+        <div class="border rounded">
+            <div class="h2">{{question.header}}</div>
+            <div class="">{{question.content}}</div>
+            <div class="row">
+               <div class="col-9">
+                   {% for tag in question.tags.values %}
+                    <a href="/tag/{{tag.tag_name}}/">
+                        <div class="badge badge-info">{{tag.tag_name}}</div>
+                    </a>
+                   {% endfor %}
+               </div>
+               <div class="col-3">
+                   <img src="{{question.author.avatar.url}}" class="img-thumbnail" style="width: 50px"/>{{question.author.username}}
+                   <div class="small">{{question.creation_date|get_due_date_string}}</div>
+               </div>
+
+        </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+{% for answer in answers %}
+<div class="row justify-content-center mt-1" id="answer{{answer.id}}">
+    <div class="col-1 text-right align-self-center">
+        {% if question.author != user %}
+            {% if answer.correct %}
+            <i class="fas fa-star"></i>
+            {% endif %}
+        {% elif answer.correct and user %}
+            <i class="fas fa-star" data-action-star="/answer{{answer.id}}/remove_star"></i>
+        {% elif answer.correct == False and user %}
+            <i class="far fa-star" data-action-star="/answer{{answer.id}}/add_star"></i>
+        {% endif %}
+    </div>
+    <div class="col-1 text-right align-self-center">
+    <!--<div class="col-1 align-self-right">-->
+        {% if user %}
+        <i class="fas fa-angle-up" data-action-vote="/answer{{answer.id}}/like"></i>
+        {% endif %}
+        <div class="font-weight-bold">{{answer.get_rating}}</div>
+        {% if user %}
+        <i class="fas fa-angle-down" data-action-vote="/answer{{answer.id}}/dislike"></i>
+        {% endif %}
+    </div>
+    <div class="col-10">
+        <div class="border rounded">
+            <div class="row">
+               <div class="col-9">
+                    <p><em>{{answer.content}}</em></p>
+               </div>
+               <div class="col-3">
+                   <img src="{{answer.author.avatar.url}}" class="img-thumbnail" style="width: 50px"/>
+                   <div class="small d-inline">{{user.username}}</div>
+                   <div class="small">{{answer.creation_date|get_due_date_string}}</div>
+               </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endfor %}
+{% if answers.paginator.num_pages > 1 %}
+<div class="row mt-4">
+    <div class="col-3 offset-6 text-center">
+        <div class="pagination">
+            <span class="step-links">
+                {% if answers.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ answers.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ answers.number }} of {{ answers.paginator.num_pages }}.
+                </span>
+
+                {% if answers.has_next %}
+                    <a href="?page={{ answers.next_page_number }}">next</a>
+                    <a href="?page={{ answers.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if user %}
+<div class="row">
+    <div class="col-10 offset-2 text-center">
+        <div class="h3 mt-5">Your answer:</div>
+        <form method="POST">
+            {% csrf_token %}
+            {{form.content}}
+            <input type="submit" class="btn btn-primary w-50 mt-3" value="Send answer" id="answer_button">
+        </form>
+
+    </div>
+
+</div>
+{% endif %}
+
+{% endblock %}
+
