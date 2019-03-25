@@ -42,7 +42,7 @@ def main_view(request, order=None):
     if order == 'hot_questions':
         questions_list = Question.objects.all().order_by('likes', '-dislikes')
     else:
-        questions_list = Question.objects.all()
+        questions_list = Question.objects.all().order_by('-creation_date')
     paginator = Paginator(questions_list, QUESTIONS_PER_PAGE)
     page = request.GET.get('page')
     questions = paginator.get_page(page)
