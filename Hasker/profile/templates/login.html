@@ -1,16 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 
-{% block header %}
-{% load static %}
-<!--<link rel='stylesheet' href="{% static 'profile/css/login.css' %}" />-->
+{% block styles %}
 {% endblock %}
 
 {% block content %}
 {% if not user %}
     <div class="row justify-content-center">
      <div class="col-4 text-center">
-      <form action="/login/" method = 'post'>
+      <form action="{% url 'login' %}" method = 'post'>
         {% csrf_token %}
           <fieldset class="form-group">
             <input type = "text" placeholder = "Username" name = "login" class="form-control">
@@ -34,8 +32,11 @@
 
 <div class="row justify-content-center">
     <div class="col-4 mt-5">
-        <a class="btn btn-danger w-100" href="/logout" role="button">Logout</a>
+        <a class="btn btn-danger w-100" href="{% url 'logout' %}" role="button">Logout</a>
     </div>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
 {% endblock %}

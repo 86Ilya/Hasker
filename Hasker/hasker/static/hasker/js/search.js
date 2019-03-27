@@ -26,7 +26,6 @@ function search_main_func(){
                 form.action += `${query}/`;
 
             }
-            console.log(form.action)
             form.submit();
     }
 

@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Ask question{% endblock %}
 
-{% block header %}
+{% block styles %}
 {% load static %}
-<script type="text/javascript" src='{% static "hasker/js/ask_question.js" %}'></script>
 <link rel='stylesheet' href="{% static 'hasker/css/hasker.css' %}" />
 {% endblock %}
 
@@ -13,7 +12,7 @@
     <div class="col-8">
 
 
-        <form id="ask_form" action="/ask/" method='post'>
+        <form id="ask_form" action="{% url 'ask' %}" method='post'>
             {% csrf_token %}
 
             <fieldset class="form-group">
@@ -41,4 +40,8 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src='{% static "hasker/js/ask_question.js" %}'></script>
 {% endblock %}

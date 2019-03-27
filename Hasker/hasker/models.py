@@ -1,7 +1,7 @@
-# Create your models here.
 from django.db import models
-from Hasker.profile.models import HaskerUser
 from django.utils import timezone
+
+from Hasker.profile.models import HaskerUser
 
 
 class LikesMixin:

@@ -1,14 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Signup{% endblock %}
 
-{% block header %}
-{% load static %}
-<script type="text/javascript" src='{% static "profile/js/prevent_password_mismatch.js" %}'></script>
+{% block styles%}
 {% endblock %}
 
 {% load filters %}
 {% block content %}
-   <!--<div class="row justify-content-center">-->
    <div class="row">
        <div class="col-4">
           {% if form.errors %}
@@ -42,4 +39,9 @@
 
    </div>
 
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script type="text/javascript" src='{% static "profile/js/prevent_password_mismatch.js" %}'></script>
 {% endblock %}

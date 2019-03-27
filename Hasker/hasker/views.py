@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 
-from .forms import AskForm, AnswerForm
+from Hasker.hasker.forms import AskForm, AnswerForm
 from Hasker.hasker.models import Tag, Question, Answer
 from Hasker.settings import EMAIL_HOST_USER
 from Hasker.httpcodes import *

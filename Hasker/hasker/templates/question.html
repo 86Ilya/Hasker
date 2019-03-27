@@ -1,10 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Question{% endblock %}
 
-{% block header %}
-{% load static %}
-<script type="text/javascript" src='{% static "hasker/js/vote.js" %}'></script>
-<script type="text/javascript" src='{% static "hasker/js/add_star.js" %}'></script>
+{% block styles %}
 {% endblock %}
 
 {% block content %}
@@ -13,13 +10,12 @@
 <div class="row justify-content-center">
 
     <div class="col-2 text-right align-self-center">
-    <!--<div class="col-2 text-right">-->
         {% if user %}
-        <i class="fas fa-angle-up" data-action-vote="/question{{question.id}}/like"></i>
+        <i class="fas fa-angle-up" data-action-vote="{% url 'question_vote' question.id 'like' %}"></i>
         {% endif %}
         <div class="font-weight-bold" id="question_rating">{{question.get_rating}}</div>
         {% if user %}
-        <i class="fas fa-angle-down" data-action-vote="/question{{question.id}}/dislike"></i>
+        <i class="fas fa-angle-down" data-action-vote="{% url 'question_vote' question.id 'dislike' %}"></i>
         {% endif %}
     </div>
     <div class="col-10">
@@ -30,7 +26,7 @@
             <div class="row">
                <div class="col-9">
                    {% for tag in question.tags.values %}
-                    <a href="/tag/{{tag.tag_name}}/">
+                    <a href="{% url 'search_by_tag' tag.tag_name %}/">
                         <div class="badge badge-info">{{tag.tag_name}}</div>
                     </a>
                    {% endfor %}
@@ -56,19 +52,18 @@
             <i class="fas fa-star"></i>
             {% endif %}
         {% elif answer.correct and user %}
-            <i class="fas fa-star" data-action-star="/answer{{answer.id}}/remove_star"></i>
+            <i class="fas fa-star" data-action-star="{% url 'answer_star' answer.id 'remove_star' %}"></i>
         {% elif answer.correct == False and user %}
-            <i class="far fa-star" data-action-star="/answer{{answer.id}}/add_star"></i>
+            <i class="far fa-star" data-action-star="{% url 'answer_star' answer.id 'add_star' %}"></i>
         {% endif %}
     </div>
     <div class="col-1 text-right align-self-center">
-    <!--<div class="col-1 align-self-right">-->
         {% if user %}
-        <i class="fas fa-angle-up" data-action-vote="/answer{{answer.id}}/like"></i>
+        <i class="fas fa-angle-up" data-action-vote="{% url 'answer_vote' answer.id 'like' %}"></i>
         {% endif %}
         <div class="font-weight-bold">{{answer.get_rating}}</div>
         {% if user %}
-        <i class="fas fa-angle-down" data-action-vote="/answer{{answer.id}}/dislike"></i>
+        <i class="fas fa-angle-down" data-action-vote="{% url 'answer_vote' answer.id 'like' %}"></i>
         {% endif %}
     </div>
     <div class="col-10">
@@ -131,3 +126,9 @@
 
 {% endblock %}
 
+{% load static %}
+
+{% block scripts %}
+<script type="text/javascript" src='{% static "hasker/js/vote.js" %}'></script>
+<script type="text/javascript" src='{% static "hasker/js/add_star.js" %}'></script>
+{% endblock %}

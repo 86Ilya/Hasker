@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Search{% endblock %}
 
-{% block header %}
+{% block styles %}
 {% load static %}
 <link rel='stylesheet' href="{% static 'css/base.css' %}" />
 {% endblock %}
@@ -25,11 +25,11 @@
       </div>
    </div>
    <div class="col-6 no_link_behaviour">
-      <a href="/question{{question.id}}">
+      <a href="{% url 'question' question.id %}">
           <div class="h3">{{question.header}}</div>
       </a>
       {% for tag in question.get_tags %}
-      <a href="/tag/{{tag.tag_name}}/">
+      <a href="{% url 'search_by_tag' tag.tag_name %}">
             <div class="badge badge-info">{{tag.tag_name}}</div>
       </a>
       {% endfor %}

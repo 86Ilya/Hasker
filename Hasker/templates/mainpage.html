@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 
-{% block header %}
+{% block styles %}
 {% endblock %}
 
 {% block content %}
 <div class="row">
-    <div class="col-12"><div class="h3"><a href="/">New questions</a>|<a href="/hot_questions">Hot questions</a></div></div>
+    <div class="col-12">
+        <div class="h3">
+            <a href="{% url 'mainpage' %}">New questions</a>|<a href="{% url 'mainpage_hot_questions' %}">Hot questions</a>
+        </div>
+    </div>
 </div>
 
 {% load filters %}
@@ -26,29 +30,26 @@
          </div>
       </div>
    </div>
-    <!--<div class="col-1 text-right text-center">-->
-       <!--{{question.get_rating}}-->
-    <!--</div>-->
     <div class="col-6 no_link_behaviour">
-      <a href="/question{{question.id}}">
+      <a href="{% url 'question' question.id %}">
           <div class="h3">{{question.header}}</div>
       </a>
       {% for tag in question.get_tags %}
-      <a href="/tag/{{tag.tag_name}}/">
+      <a href="{% url 'search_by_tag' tag.tag_name %}">
             <div class="badge badge-info">{{tag.tag_name}}</div>
       </a>
       {% endfor %}
    </div>
    <div class="col-2">
       <div class="h6">{{question.author.username}}</div>
-      <!--<div class="small">{{question.get_relation_creation_time_str}}</div>-->
        <div class="small">{{question.creation_date|get_due_date_string}}</div>
    </div>
-   <!--<div class="col-2">-->
-      <!--<div class="h6">{{question.author.username}}</div>-->
-   <!--</div>-->
 
 </div>
 {% endfor %}
 {% include 'pagination.html' %}
 {% endblock %}
+
+{% block scripts %}
+{% endblock %}
+

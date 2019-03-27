@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
-from .forms import HaskerUserSettingsForm, HaskerUserForm
+
+from Hasker.profile.forms import HaskerUserSettingsForm, HaskerUserForm
 from Hasker.hasker.views import base
 from Hasker.httpcodes import *
 

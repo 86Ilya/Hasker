@@ -1,5 +1,6 @@
-from Hasker.profile import views
 from django.urls import path
+
+from Hasker.profile import views
 
 urlpatterns = [
     path(r'login/', views.login_view, name="login"),

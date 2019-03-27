@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Settings{% endblock %}
 
-{% block header %}
-{% load static %}
-<script type="text/javascript" src='{% static "profile/js/prevent_password_mismatch.js" %}'></script>
+{% block styles %}
 {% endblock %}
 
 {% block content %}
@@ -34,9 +32,8 @@
               {{form.avatar}}
               <br/>
               <label for="id_avatar" class="">Select avatar</label>
-              <img src="{{user.avatar.url}}" class="img-thumbnail"/>
+              <img src="{{user.get_avatar_url}}" class="img-thumbnail"/>
           </fieldset>
-      <!--<input type ="submit" class = "btn btn-primary w-100" value = "Save" id="submit_button">-->
      </form>
          <div class = "btn btn-primary w-100 mb-1" id="submit_button">Save</div>
          <div id="pre_submit"></div>
@@ -47,4 +44,9 @@
 
 <div id="result">{{result}}</div>
 
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script type="text/javascript" src='{% static "profile/js/prevent_password_mismatch.js" %}'></script>
 {% endblock %}
