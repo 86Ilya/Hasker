@@ -21,3 +21,6 @@ class HaskerUser(AbstractUser):
             return self.avatar.url
         else:
             return DEFAULT_AVATAR_URL
+
+    def __str__(self):
+        return "HaskerUser: {}".format(self.username)

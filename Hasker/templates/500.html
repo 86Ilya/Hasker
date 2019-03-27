@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Server Error</title>
+    {% load static %}
+    <link rel='stylesheet' href="{% static 'css/vendor/bootstrap/bootstrap.min.css' %}" />
+    <link rel='stylesheet' href="{% static 'css/base.css' %}" />
+</head>
+<body>
+<div class="container h-100">
+    <div class="row align-items-center h-100">
+       <div class="col-12 mt-5">
+           <div class="jumbotron text-center">
+               <div>Server Error</div>
+               <a href="{% url 'mainpage' %}">Back to Main page</a>
+           </div>
+       </div>
+    </div>
+</div>
+
+</body>
+</html>

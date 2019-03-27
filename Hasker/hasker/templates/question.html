@@ -32,7 +32,7 @@
                    {% endfor %}
                </div>
                <div class="col-3">
-                   <img src="{{question.author.avatar.url}}" class="img-thumbnail" style="width: 50px"/>{{question.author.username}}
+                   <img src="{{question.author.get_avatar_url}}" class="img-thumbnail" style="width: 50px"/>{{question.author.username}}
                    <div class="small">{{question.creation_date|get_due_date_string}}</div>
                </div>
 
@@ -73,7 +73,7 @@
                     <p><em>{{answer.content}}</em></p>
                </div>
                <div class="col-3">
-                   <img src="{{answer.author.avatar.url}}" class="img-thumbnail" style="width: 50px"/>
+                   <img src="{{answer.author.get_avatar_url}}" class="img-thumbnail" style="width: 50px"/>
                    <div class="small d-inline">{{user.username}}</div>
                    <div class="small">{{answer.creation_date|get_due_date_string}}</div>
                </div>

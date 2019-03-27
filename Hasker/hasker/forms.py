@@ -1,13 +1,15 @@
 from django import forms
 
 from Hasker.hasker.models import Question, Tag, Answer
-from Hasker.settings import DEBUG
 
-if DEBUG:
+tags = Tag.objects.all()
+
+if len(tags) == 0:
     tag_names_list = ['c++', 'scala', 'python', 'java', 'javascript', 'django', 'css']
-    TAG_CHOICES = [[i + 1, name] for i, name in enumerate(tag_names_list)]
-else:
-    TAG_CHOICES = [[tag.id, tag.tag_name] for tag in Tag.objects.all()]
+    for tag in tag_names_list:
+        Tag(tag_name=tag).save()
+
+TAG_CHOICES = [[tag.id, tag.tag_name] for tag in tags]
 
 
 class AskForm(forms.ModelForm):

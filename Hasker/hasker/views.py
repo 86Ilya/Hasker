@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth import get_user_model
@@ -124,8 +124,7 @@ def ask_view(request):
 
 def question_view(request, question_id):
     context = base(request)
-
-    question = Question.objects.get(id=question_id)
+    question = get_object_or_404(Question, id=question_id)
     user = context["user"]
 
     status = HTTP_OK
@@ -178,12 +177,7 @@ def question_view(request, question_id):
 def question_vote(request, question_id, vote):
     question = Question.objects.get(id=question_id)
     user = User.objects.get(pk=request.user.pk)
-    result = None
-    if vote.lower() == 'like':
-        result = question.like(user)
-    elif vote.lower() == 'dislike':
-        result = question.dislike(user)
-
+    result = question.vote(user, vote)
     rating = question.get_rating()
     context = {'result': result, 'rating': rating}
     return JsonResponse(context)
@@ -193,12 +187,7 @@ def question_vote(request, question_id, vote):
 def answer_vote(request, answer_id, vote):
     answer = Answer.objects.get(id=answer_id)
     user = User.objects.get(pk=request.user.pk)
-    result = None
-    if vote.lower() == 'like':
-        result = answer.like(user)
-    elif vote.lower() == 'dislike':
-        result = answer.dislike(user)
-
+    result = answer.vote(user, vote)
     rating = answer.get_rating()
     context = {'result': result, 'rating': rating}
     return JsonResponse(context)
@@ -207,27 +196,9 @@ def answer_vote(request, answer_id, vote):
 @login_required
 def answer_star(request, answer_id, star):
     answer = Answer.objects.get(id=answer_id)
-    question = Question.objects.get(answer=answer)
     user = User.objects.get(pk=request.user.pk)
-    result = None
-    if user != question.author:
-        context = {'result': result, 'correct': None}
-        return JsonResponse(context)
+    result = answer.move_star(user, star)
+    correct = answer.correct()
 
-    # all_question_answers = Answer.objects.select_for_update(question=question)
-
-    if star.lower() == 'add_star' and answer.correct is False:
-        old_answer = Answer.objects.filter(question=question, correct=True).first()
-        if old_answer:
-            old_answer.correct = False
-            old_answer.save()
-        answer.correct = True
-        answer.save()
-        result = True
-    elif star.lower() == 'remove_star' and answer.correct is True:
-        answer.correct = False
-        answer.save()
-        result = True
-
-    context = {'result': result, 'correct': answer.correct}
+    context = {'result': result, 'correct': correct}
     return JsonResponse(context)

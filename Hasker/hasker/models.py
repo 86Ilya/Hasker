@@ -18,8 +18,7 @@ class LikesMixin:
         elif not exist_like:
             self.likes.add(user)
         else:
-            # TODO
-            return False
+            return
         return True
 
     def dislike(self, user):
@@ -30,24 +29,17 @@ class LikesMixin:
         elif not exist_dislike:
             self.dislikes.add(user)
         else:
-            # TODO
-            return False
+            return
         return True
 
+    def vote(self, user, vote):
+        result = None
+        if vote.lower() == 'like':
+            result = self.like(user)
+        elif vote.lower() == 'dislike':
+            result = self.dislike(user)
 
-class ReprDateMixin:
-    def get_relation_creation_time_str(self):
-        now = timezone.now()
-        delta = now - self.creation_date
-        if delta.days >= 1:
-            return "{} days ago".format(delta.days)
-        else:
-            if delta.seconds < 60:
-                return "{} seconds ago".format(delta.seconds)
-            if 60 < delta.seconds < 60 * 60:
-                return "{} minutes ago".format(delta.seconds // 60)
-
-            return "{} hours ago".format(delta.seconds // (60 * 60))
+        return result
 
 
 class Tag(models.Model):
@@ -62,6 +54,7 @@ class Question(LikesMixin, models.Model):
     tags = models.ManyToManyField(Tag, related_name='tags', default=None)
     likes = models.ManyToManyField(HaskerUser, default=None, related_name="question_likes")
     dislikes = models.ManyToManyField(HaskerUser, default=None, related_name="question_dislikes")
+    correct_answer = models.ForeignKey('Answer', default=None, blank=True, null=True, related_name='correct_answer', on_delete=models.CASCADE)
 
     def get_answers(self):
         answers = Answer.objects.filter(question=self)
@@ -73,15 +66,43 @@ class Question(LikesMixin, models.Model):
     def get_tags(self):
         return list(self.tags.values())
 
+    def __str__(self):
+        return "Question '{}'".format(self.header)
+
 
 class Answer(LikesMixin, models.Model):
     content = models.CharField(max_length=1024)
     author = models.ForeignKey(HaskerUser, related_name='answer_author', on_delete=models.CASCADE)
     creation_date = models.DateTimeField(default=timezone.now)
-    correct = models.BooleanField(default=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     likes = models.ManyToManyField(HaskerUser, default=None, related_name="answer_likes")
     dislikes = models.ManyToManyField(HaskerUser, default=None, related_name="answer_dislikes")
 
     class Meta:
         ordering = ['creation_date']
+
+    def correct(self):
+        question = Question.objects.get(answer=self)
+        return question.correct_answer == self
+
+    def move_star(self, user, star):
+        result = None
+        question = Question.objects.get(answer=self)
+        iamcorrect = question.correct_answer == self
+
+        if user != question.author:
+            return result
+
+        if star.lower() == 'add_star' and iamcorrect is False:
+            question.correct_answer = self
+            question.save()
+            result = True
+        elif star.lower() == 'remove_star' and iamcorrect:
+            question.correct_answer = None
+            question.save()
+            result = True
+
+        return result
+
+    def __str__(self):
+        return "Answer '{:.128}'...".format(self.content)
