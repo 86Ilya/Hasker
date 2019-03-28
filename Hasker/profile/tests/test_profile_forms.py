@@ -1,6 +1,8 @@
+import base64
+
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-import base64
+
 from Hasker.profile.forms import HaskerUserSettingsForm, HaskerUserForm
 
 
@@ -18,7 +20,7 @@ class TestProfileForms(TestCase):
 
     def test_hasker_user_form_with_correct_values(self):
         username = 'test'
-        password = 'test123'
+        password = '12346578'
         email = 'email@email.ru'
         avatar = {'avatar': SimpleUploadedFile('avatar.jpeg', base64.decodebytes(self.avatar_image_encoded))}
         form_data = {
@@ -57,7 +59,7 @@ class TestProfileForms(TestCase):
 
     def test_hasker_user_settings_form_with_correct_values(self):
         username = 'test'
-        password = 'test123'
+        password = '12345678'
         email = 'email@email.ru'
         avatar = {'avatar': SimpleUploadedFile('avatar.jpeg', base64.decodebytes(self.avatar_image_encoded))}
         form_data = {

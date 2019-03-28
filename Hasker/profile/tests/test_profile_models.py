@@ -7,10 +7,6 @@ from Hasker.profile.models import HaskerUser
 
 class TestProfileModel(TestCase):
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     super().setUpClass()
-
     def test_hasker_user_model_with_correct_values(self):
         username = "test"
         email = "email@email.ru"

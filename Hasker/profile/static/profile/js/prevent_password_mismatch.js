@@ -12,20 +12,22 @@ function submit_data(event){
   let password2 = document.getElementById("id_password_again").value;
   let result = document.getElementById("pre_submit");
   let form = document.querySelector('form[enctype="multipart/form-data"]');
-  if(password1.length > 0 && password2.length > 0){
+  if(password1.length > 0 || password2.length > 0){
     if(password1 === password2){
       result.innerText = "Ok";
-      form.submit();
-    } else {
-
+    } 
+    else {
       result.innerText = "New passwords mismatch";
       setTimeout(()=>{
         result.innerText = '';
         result.removeAttribute("class");
       }, 3000);
       result.setAttribute("class", "failed_animation");
-
-
     }
   }
+  else if(password1.length < 8){
+      result.innerText = "Password length must be at least 8 symbol";
+  }
+
+  form.submit();
 }

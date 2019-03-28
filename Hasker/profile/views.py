@@ -60,14 +60,11 @@ def settings_view(request):
     context.update({"form": HaskerUserSettingsForm})
     status = HTTP_OK
     if request.method == "POST":
-        username = user.username
         user_settings_form = HaskerUserSettingsForm(request.POST, request.FILES, instance=user)
         context.update({'form': user_settings_form})
         if user_settings_form.is_valid():
             user_update = user_settings_form.save(commit=False)
-            # everything is possible
-            user_update.username = username
-            user_update.set_password(user.password)
+            user_update.set_password(user_update.password)
             user_update.save()
             context.update({'user': user_update})
         else:

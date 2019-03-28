@@ -5,35 +5,14 @@
 {% endblock %}
 
 {% block content %}
-   <div class="row">
-      <div class="col-4">
-          {% if form.errors %}
-          <div class="failed_animation">
-              {{form.errors.email}}
-              {{form.errors.avatar}}
-              {{form.non_field_errors}}
-          </div>
-          {% endif %}
-     </div>
-     <div class="col-4">
+   <div class="row justify-content-center">
+     <div class="col-6">
       <form method = 'post' enctype="multipart/form-data">
         {% csrf_token %}
           <fieldset class="form-group">
-              Login: <b>{{user.username}}</b>
-              {{form.username}}
-              <br/>
-              <br/>
-              {{form.email}}
-              <br/>
-              {{form.password}}
-              <br/>
-              {{form.password_again}}
-              <br/>
-              {{form.avatar}}
-              <br/>
-              <label for="id_avatar" class="">Select avatar</label>
-              <img src="{{user.get_avatar_url}}" class="img-thumbnail"/>
+              {{form}}
           </fieldset>
+          <img src="{{user.get_avatar_url}}" id="avatar_image" class="w-50"/>
      </form>
          <div class = "btn btn-primary w-100 mb-1" id="submit_button">Save</div>
          <div id="pre_submit"></div>
@@ -49,4 +28,5 @@
 {% block scripts %}
 {% load static %}
 <script type="text/javascript" src='{% static "profile/js/prevent_password_mismatch.js" %}'></script>
+<script type="text/javascript" src='{% static "profile/js/avatar_preview.js" %}'></script>
 {% endblock %}

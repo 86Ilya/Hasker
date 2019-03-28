@@ -1,17 +1,18 @@
 from django.test import TestCase
 from django.test import Client
+from django.urls import reverse
 
 from Hasker.hasker.models import Question, Answer, Tag
 from Hasker.profile.models import HaskerUser
-from Hasker.httpcodes import *
+from Hasker.httpcodes import HTTP_OK, HTTP_NOT_FOUND, HTTP_BAD_REQUEST, HTTP_FOUND
 
 
 class TestHaskerViews(TestCase):
     username1 = "test1"
     username2 = "test2"
 
-    password1 = "123"
-    password2 = "456"
+    password1 = "12345678"
+    password2 = "87654321"
 
     email = "email@email.ru"
     # see hasker.forms 'if DEBUG:..'
@@ -31,7 +32,7 @@ class TestHaskerViews(TestCase):
         # create tags
         tag_names_list = ['c++', 'scala', 'python', 'java', 'javascript', 'django', 'css']
         for tag in tag_names_list:
-            Tag(tag_name=tag).save()
+            Tag.objects.get_or_create(tag_name=tag)
 
         # create question
         for i in range(3):
@@ -51,7 +52,7 @@ class TestHaskerViews(TestCase):
 
     def test_main_view(self):
         c = Client()
-        response = c.get('/')
+        response = c.get(reverse('mainpage'))
 
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertContains(response, "question0", 2, HTTP_OK)
@@ -60,7 +61,7 @@ class TestHaskerViews(TestCase):
 
     def test_search_view_with_correct_values(self):
         c = Client()
-        response = c.get('/search/question0/')
+        response = c.get(reverse("search", kwargs={'query': 'question0'}))
 
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertContains(response, "question0", 2, HTTP_OK)
@@ -69,12 +70,12 @@ class TestHaskerViews(TestCase):
 
     def test_search_view_with_incorrect_values(self):
         c = Client()
-        response = c.get('/search/{}/'.format('a'*1025))
+        response = c.get(reverse("search", kwargs={'query': 'a'*1025}))
         self.assertEqual(response.status_code, HTTP_BAD_REQUEST)
 
     def test_search_by_tag_view_with_correct_values(self):
         c = Client()
-        response = c.get('/tag/c++/')
+        response = c.get(reverse("search_by_tag", kwargs={'tag': 'c++'}))
 
         self.assertEqual(response.status_code, HTTP_OK)
         self.assertContains(response, "question0", 2, HTTP_OK)
@@ -83,7 +84,7 @@ class TestHaskerViews(TestCase):
 
     def test_search_by_tag_view_with_incorrect_values(self):
         c = Client()
-        response = c.get('/tag/caramba/')
+        response = c.get(reverse("search_by_tag", kwargs={'tag': 'caramba'}))
         self.assertEqual(response.status_code, HTTP_NOT_FOUND)
 
     def test_ask_view_with_correct_values(self):
@@ -94,7 +95,7 @@ class TestHaskerViews(TestCase):
             'content': 'new content',
             'tags': ['1', '2', '3']
         }
-        response = c.post('/ask/', ask_question_data, follow=True)
+        response = c.post(reverse('ask'), ask_question_data, follow=True)
         path, code = response.redirect_chain[0]
 
         self.assertRegex(path, r'/question\d*')
@@ -116,7 +117,7 @@ class TestHaskerViews(TestCase):
             'header': 'n'*1025,
             'content': 't'*1025,
         }
-        response = c.post('/ask/', ask_question_data, follow=True)
+        response = c.post(reverse('ask'), ask_question_data, follow=True)
 
         self.assertEqual(response.status_code, HTTP_BAD_REQUEST)
 
@@ -128,7 +129,7 @@ class TestHaskerViews(TestCase):
         question = Question(header=header, content=content, author=user)
         question.save()
 
-        response = c.get('/question{}/?page=1'.format(question.id))
+        response = c.get(reverse('question', kwargs={"question_id": question.id}))
         self.assertContains(response, header, 2, HTTP_OK)
         self.assertContains(response, content, 1, HTTP_OK)
 
@@ -142,7 +143,7 @@ class TestHaskerViews(TestCase):
 
         c.login(username=self.username1, password=self.password1)
         answer_data = {'content': 'z'*100}
-        response = c.post('/question{}/'.format(question.id), answer_data, follow=True)
+        response = c.post(reverse('question', kwargs={"question_id": question.id}), answer_data, follow=True)
         answer_from_db = Answer.objects.get(content=answer_data['content'])
 
         path, code = response.redirect_chain[0]
@@ -161,7 +162,7 @@ class TestHaskerViews(TestCase):
 
         c.login(username=self.username1, password=self.password1)
         answer_data = {'content': 'z'*1025}
-        response = c.post('/question{}/'.format(question.id), answer_data, follow=True)
+        response = c.post(reverse('question', kwargs={"question_id": question.id}), answer_data, follow=True)
         self.assertEqual(response.status_code, HTTP_BAD_REQUEST)
 
         answer_from_db = Answer.objects.filter(content=answer_data['content'])
@@ -179,7 +180,7 @@ class TestHaskerViews(TestCase):
         question.save()
 
         c.login(username=self.username2, password=self.password2)
-        response = c.post('/question{}/like'.format(question.id), {})
+        response = c.post(reverse('question_vote', kwargs={"question_id": question.id, "vote": "like"}), {})
         self.assertJSONEqual(response.content.decode(), {"rating": 1, "result": True})
         self.assertEqual(question.likes.values()[0]['username'], user2.username)
 
@@ -197,7 +198,7 @@ class TestHaskerViews(TestCase):
         answer.save()
 
         c.login(username=self.username2, password=self.password2)
-        response = c.post('/answer{}/like'.format(answer.id))
+        response = c.post(reverse('answer_vote', kwargs={"answer_id": answer.id, "vote": "like"}), {})
         self.assertJSONEqual(response.content.decode(), {"rating": 1, "result": True})
         self.assertEqual(answer.likes.values()[0]['username'], user2.username)
 
@@ -215,7 +216,7 @@ class TestHaskerViews(TestCase):
         answer.save()
 
         c.login(username=self.username2, password=self.password2)
-        response = c.post('/answer{}/dislike'.format(answer.id))
+        response = c.post(reverse('answer_vote', kwargs={"answer_id": answer.id, "vote": "dislike"}), {})
         self.assertJSONEqual(response.content.decode(), {"rating": -1, "result": True})
         self.assertEqual(answer.dislikes.values()[0]['username'], user2.username)
 
@@ -233,11 +234,11 @@ class TestHaskerViews(TestCase):
         answer.save()
 
         c.login(username=self.username1, password=self.password1)
-        self.assertFalse(answer.correct)
-        response = c.post('/answer{}/add_star'.format(answer.id))
+        self.assertFalse(answer.correct())
+        response = c.post(reverse('answer_star', kwargs={"answer_id": answer.id, "star": "add_star"}))
         self.assertJSONEqual(response.content.decode(), {"correct": True, "result": True})
         answer_from_db = Answer.objects.get(id=answer.id)
-        self.assertTrue(answer_from_db.correct)
+        self.assertTrue(answer_from_db.correct())
 
     def test_answer_remove_star(self):
         question_header = 'testing answer remove star'
@@ -253,8 +254,8 @@ class TestHaskerViews(TestCase):
         answer.save()
 
         c.login(username=self.username1, password=self.password1)
-        response = c.post('/answer{}/add_star'.format(answer.id))
+        response = c.post(reverse('answer_star', kwargs={"answer_id": answer.id, "star": "add_star"}))
         self.assertJSONEqual(response.content.decode(), {"correct": True, "result": True})
 
-        response = c.post('/answer{}/remove_star'.format(answer.id))
+        response = c.post(reverse('answer_star', kwargs={"answer_id": answer.id, "star": "remove_star"}))
         self.assertJSONEqual(response.content.decode(), {"correct": False, "result": True})

@@ -6,31 +6,12 @@
 
 {% load filters %}
 {% block content %}
-   <div class="row">
-       <div class="col-4">
-          {% if form.errors %}
-          <div class="failed_animation">
-              {{form.errors.username}}
-              {{form.errors.email}}
-              {{form.errors.avatar}}
-              {{form.non_field_errors}}
-          </div>
-          {% endif %}
-       </div>
-     <div class="col-4">
+   <div class="row justify-content-center">
+     <div class="col-6 self-align-center">
       <form method = 'post' enctype="multipart/form-data">
         {% csrf_token %}
           <fieldset class="form-group">
-              {{form.username}}
-              <br/>
-              {{form.email}}
-              <br/>
-              {{form.password}}
-              <br/>
-              {{form.password_again}}
-              <br/>
-              {{form.avatar}}
-              <label for="id_avatar" class="">Select avatar</label>
+            {{form}}
           </fieldset>
      </form>
          <div class = "btn btn-primary w-100" id="submit_button">Signup</div>
