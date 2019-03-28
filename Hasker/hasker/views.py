@@ -4,39 +4,17 @@ from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-from django.core.mail import send_mail
 
 from Hasker.hasker.forms import AskForm, AnswerForm
 from Hasker.hasker.models import Tag, Question, Answer
-from Hasker.settings import EMAIL_HOST_USER
-from Hasker.httpcodes import *
+from Hasker.httpcodes import HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_OK, HTTP_UNAUTHORIZED
+from Hasker.helpers import base, send_email_with_link_to_question
+from Hasker.helpers import QUESTIONS_PER_PAGE, ANSWERS_PER_PAGE, MAX_LENGTH_SEARCH
+from Hasker.hasker.helpers import save_answer_from_request, save_question_from_request
 
-TRENDING_QUESTIONS = 20
-QUESTIONS_PER_PAGE = 20
-ANSWERS_PER_PAGE = 30
-MAX_LENGTH_SEARCH = 1024
 User = get_user_model()
 
 
-def base(request):
-    """
-    :param request:
-    :return dict: Возвращает базовый контекст для всех страниц
-    """
-    # username = None
-    # avatar = None
-    context = dict()
-    trending_questions = Question.objects.all().order_by('likes', '-dislikes')[:TRENDING_QUESTIONS]
-    context.update({'trending_questions': trending_questions})
-    if not request.user.is_anonymous:
-        user = User.objects.get(pk=request.user.pk)
-        context.update({"user": user})
-    else:
-        context.update({"user": None})
-    return context
-
-
-# Create your views here.
 def main_view(request, order=None):
     context = base(request)
     if order == 'hot_questions':
@@ -97,23 +75,12 @@ def search_by_tag_view(request, tag):
 @login_required
 def ask_view(request):
     context = base(request)
-    user = context['user']
     context.update({'exist_tags': Tag.objects.all()})
     status = HTTP_OK
 
     if request.method == "POST":
-
-        ask_form = AskForm(request.POST)
-        context.update({'form': ask_form})
-        if ask_form.is_valid():
-
-            ask_form.author = user
-            question = ask_form.save(commit=False)
-
-            question.author = user
-            question.save()
-            ask_form.save_m2m()
-
+        question = save_question_from_request(request, context)
+        if question:
             return redirect(reverse('question', kwargs={'question_id': question.id}))
         else:
             status = HTTP_BAD_REQUEST
@@ -125,51 +92,27 @@ def ask_view(request):
 def question_view(request, question_id):
     context = base(request)
     question = get_object_or_404(Question, id=question_id)
-    user = context["user"]
-
     status = HTTP_OK
     # adding answer
     if request.method == "POST":
-        # TODO am I need to login?
-        if user is None:
+        if context["user"] is None:
             return render(request, 'question.html', context, status=HTTP_UNAUTHORIZED)
-        answer_form = AnswerForm(request.POST)
-        context.update({'form': answer_form})
-
-        if answer_form.is_valid():
-            answer = answer_form.save(commit=False)
-            answer.author = user
-            answer.question = question
-            answer.save()
-            # send email to question author
-            email_recepient = question.author.email
-
-            num_pages = question.get_answers_count() // QUESTIONS_PER_PAGE
-            last_page = 1 if num_pages == 0 else num_pages
-            link = '/question{}/?page={}#answer{}'.format(question.id, last_page, answer.id)
-            subject = "You have new answer for your question {}".format(question.header)
-            content = "Link for answer: http://localhost:8000/" + link
-            # Отправитель и получатель - одно лицо, сделано для отладки. TODO
-            send_mail(subject, content, EMAIL_HOST_USER, [EMAIL_HOST_USER], fail_silently=False)
-
-            # return redirect(reverse('question', kwargs={'question_id': question.id}))
-            # TODO is redirect is normal?
+        answer = save_answer_from_request(request, context, question)
+        if answer:
+            link = send_email_with_link_to_question(question, answer)
             return redirect(link)
         else:
             status = HTTP_BAD_REQUEST
-
-    else:
+    elif request.method == "GET":
         # blank form
         context.update({'form': AnswerForm})
 
     answers_list = Answer.objects.filter(question=question)
-
     paginator = Paginator(answers_list, ANSWERS_PER_PAGE)
     page = request.GET.get('page')
     answers = paginator.get_page(page)
 
-    context.update({'question': question})
-    context.update({'answers': answers})
+    context.update({'question': question, 'answers': answers})
     return render(request, 'question.html', context, status=status)
 
 

@@ -1,13 +1,14 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 
 from Hasker.profile.forms import HaskerUserSettingsForm, HaskerUserForm
-from Hasker.hasker.views import base
-from Hasker.httpcodes import *
+from Hasker.helpers import base
+from Hasker.profile.helpers import save_haskeruser_by_form, update_hasker_user_by_form
+from Hasker.httpcodes import HTTP_BAD_REQUEST, HTTP_OK, HTTP_UNAUTHORIZED
 
-User = get_user_model()
+HaskerUser = get_user_model()
 
 
 def login_view(request):
@@ -37,14 +38,8 @@ def signup_view(request):
     context.update({'form': HaskerUserForm})
     status = HTTP_OK
     if request.method == "POST":
-        user_form = HaskerUserForm(request.POST, request.FILES)
-
-        context.update({'form': user_form})
-        if user_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-            context.update({'user': user})
+        user = save_haskeruser_by_form(request, context)
+        if user:
             login(request, user)
             return render(request, 'signup_complete.html', context)
         else:
@@ -56,18 +51,11 @@ def signup_view(request):
 @login_required
 def settings_view(request):
     context = base(request)
-    user = context["user"]
     context.update({"form": HaskerUserSettingsForm})
     status = HTTP_OK
     if request.method == "POST":
-        user_settings_form = HaskerUserSettingsForm(request.POST, request.FILES, instance=user)
-        context.update({'form': user_settings_form})
-        if user_settings_form.is_valid():
-            user_update = user_settings_form.save(commit=False)
-            user_update.set_password(user_update.password)
-            user_update.save()
-            context.update({'user': user_update})
-        else:
+        user = update_hasker_user_by_form(request, context)
+        if not user:
             status = HTTP_BAD_REQUEST
 
     return render(request, 'settings.html', context, status=status)
