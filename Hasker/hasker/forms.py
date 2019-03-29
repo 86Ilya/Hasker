@@ -2,14 +2,16 @@ from django import forms
 
 from Hasker.hasker.models import Question, Tag, Answer
 
-tags = Tag.objects.all()
 
+# TODO при начальной иницализации происходит косяк
+tags = Tag.objects.all()
 if len(tags) == 0:
     tag_names_list = ['c++', 'scala', 'python', 'java', 'javascript', 'django', 'css']
     for tag in tag_names_list:
         Tag(tag_name=tag).save()
 
 TAG_CHOICES = [[tag.id, tag.tag_name] for tag in tags]
+# TAG_CHOICES = [[1, 'c++'], [2, 'scala']]
 
 
 class AskForm(forms.ModelForm):

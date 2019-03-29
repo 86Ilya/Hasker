@@ -3,3 +3,5 @@
 helpers
 *pyc
 __pycache__
+migrations
+media

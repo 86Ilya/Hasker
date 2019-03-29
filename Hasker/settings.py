@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Hasker.profile',
     'Hasker.hasker',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
