@@ -5,11 +5,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
+if SECRET_KEY is None:
+    print("SECRET_KEY NOT FOUND! PLEASE PROVIDE VALID SECRET_KEY")
+    os.sys.exit(1)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['']
 
 
 # Application definition
@@ -124,10 +127,19 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 AUTH_USER_MODEL = "profile.HaskerUser"
 
+# Display settings
+# Количество вопросов отображаемых в колонке справа
+TRENDING_QUESTIONS = 20
+# Максимальное количество вопросов отображаемых на одной странице
+QUESTIONS_PER_PAGE = 20
+# Максимальное количество ответов отображаемых на одной странице
+ANSWERS_PER_PAGE = 30
+# Максимальная длинна запроса на поиск
+MAX_LENGTH_SEARCH = 1024
+
+
 try:
-    from Hasker.local_settings import *
+    from .local_settings import *
     print("Using local settings. Remove it in production!")
 except ImportError as error:
-
     print(error)
-    pass

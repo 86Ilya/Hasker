@@ -11,7 +11,7 @@ services:
     build:
       context: .
       dockerfile: ./build/hasker_service/Dockerfile
-    command: bash /opt/hasker/build/hasker_service/fire.sh
+    command: /opt/hasker/build/hasker_service/fire.sh
     volumes:
       - .:/opt/hasker
     ports:

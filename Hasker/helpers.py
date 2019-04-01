@@ -3,13 +3,9 @@ from django.contrib.auth import get_user_model
 
 from Hasker.settings import EMAIL_HOST_USER
 from Hasker.hasker.models import Question
+from Hasker.settings import TRENDING_QUESTIONS, QUESTIONS_PER_PAGE
 
 User = get_user_model()
-
-TRENDING_QUESTIONS = 20
-QUESTIONS_PER_PAGE = 20
-ANSWERS_PER_PAGE = 30
-MAX_LENGTH_SEARCH = 1024
 
 
 def base(request):

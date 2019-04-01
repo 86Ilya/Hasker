@@ -1,15 +1,16 @@
 from django import forms
+from django.db import ProgrammingError
 
 from Hasker.hasker.models import Question, Tag, Answer
 
-tags = Tag.objects.all()
-
-if len(tags) == 0:
-    tag_names_list = ['c++', 'scala', 'python', 'java', 'javascript', 'django', 'css']
-    for tag in tag_names_list:
-        Tag(tag_name=tag).save()
-
-TAG_CHOICES = [[tag.id, tag.tag_name] for tag in tags]
+# Workaround for initial migration
+try:
+    TAG_CHOICES = [[tag.id, tag.tag_name] for tag in Tag.objects.all()]
+except ProgrammingError as error:
+    if 'LINE 1: ...T "hasker_tag"."id", "hasker_tag"."tag_name" FROM "hasker_ta...' in str(error):
+        TAG_CHOICES = [[1, '1'], ]
+    else:
+        raise
 
 
 class AskForm(forms.ModelForm):

@@ -6,6 +6,8 @@ DEBUG = True
 DB_PORT = os.environ.get('HASKER_DB_PORT')
 DB_HOST = os.environ.get('HASKER_DB_HOST')
 
+ALLOWED_HOSTS = ['*']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

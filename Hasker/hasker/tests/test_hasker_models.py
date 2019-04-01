@@ -6,7 +6,6 @@ from Hasker.profile.models import HaskerUser
 
 class TestHaskerModels(TestCase):
 
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -19,17 +18,9 @@ class TestHaskerModels(TestCase):
         user3 = HaskerUser(username="test3", email="email3@email.ru", password="456")
         user3.save()
 
-        # create tags
-        # tag_names_list = ['c++', 'scala', 'python', 'java', 'javascript', 'django', 'css']
-        # for tag in tag_names_list:
-        #     Tag(tag_name=tag).save()
-
         # create question
         question = Question(header="main question", content="abc"*64, author=user1)
         question.save()
-        # for i in range(3):
-        #     question.tags.add(Tag.objects.get(tag_name=tag_names_list[i]))
-        # question.save()
 
         # create answers
         answer1 = Answer(content="zxc"*64, author=user2, question=question)
@@ -91,4 +82,3 @@ class TestHaskerModels(TestCase):
         # TODO likes=user1?
         question_from_db = Question.objects.get(likes=user1)
         self.assertEqual(question_from_db.header, "main question")
-

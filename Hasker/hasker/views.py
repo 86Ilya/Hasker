@@ -9,7 +9,7 @@ from Hasker.hasker.forms import AskForm, AnswerForm
 from Hasker.hasker.models import Tag, Question, Answer
 from Hasker.httpcodes import HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_OK, HTTP_UNAUTHORIZED
 from Hasker.helpers import base, send_email_with_link_to_question
-from Hasker.helpers import QUESTIONS_PER_PAGE, ANSWERS_PER_PAGE, MAX_LENGTH_SEARCH
+from Hasker.settings import QUESTIONS_PER_PAGE, ANSWERS_PER_PAGE, MAX_LENGTH_SEARCH
 from Hasker.hasker.helpers import save_answer_from_request, save_question_from_request
 
 User = get_user_model()

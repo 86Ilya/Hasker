@@ -59,3 +59,17 @@ def settings_view(request):
             status = HTTP_BAD_REQUEST
 
     return render(request, 'settings.html', context, status=status)
+
+
+def handler404(request, exception, template_name="404.html"):
+    context = base(request)
+    context.update({"ttt": "test"})
+    response = render("404.html", context, status=404)
+    return response
+
+
+def handler500(request, exception, template_name="500.html"):
+    context = base(request)
+    response = render("500.html", context)
+    response.status_code = 500
+    return response

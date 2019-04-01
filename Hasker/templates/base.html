@@ -1,0 +1,13 @@
+{% extends "base_header.html" %}
+{% block title %}Hasker{% endblock %}
+
+{% block trending %}
+    {% for question in trending_questions %}
+     <div class="row mt-1">
+        <div class="col-2 mx-auto">
+            <div class="badge badge-secondary">{{question.get_rating}}</div>
+        </div>
+         <div class="col-10 no_link_behaviour"><a href="{% url 'question' question.id %}">{{question.header}}</a></div>
+     </div>
+     {% endfor %}
+{% endblock %}

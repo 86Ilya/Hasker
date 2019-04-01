@@ -17,7 +17,8 @@ class Question(LikesMixin, models.Model):
     tags = models.ManyToManyField(Tag, related_name='tags', default=None)
     likes = models.ManyToManyField(HaskerUser, default=None, related_name="question_likes")
     dislikes = models.ManyToManyField(HaskerUser, default=None, related_name="question_dislikes")
-    correct_answer = models.ForeignKey('Answer', default=None, blank=True, null=True, related_name='correct_answer', on_delete=models.CASCADE)
+    correct_answer = models.ForeignKey('Answer', default=None, blank=True, null=True, related_name='correct_answer',
+                                       on_delete=models.CASCADE)
 
     def get_answers(self):
         answers = Answer.objects.filter(question=self)

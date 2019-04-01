@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.test import Client
 from django.urls import reverse
 
-from Hasker.httpcodes import HTTP_FOUND, HTTP_OK, HTTP_UNAUTHORIZED, HTTP_BAD_REQUEST 
+from Hasker.httpcodes import HTTP_FOUND, HTTP_OK, HTTP_UNAUTHORIZED, HTTP_BAD_REQUEST
 from Hasker.profile.models import HaskerUser
 
 
@@ -48,10 +48,8 @@ class TestProfileViews(TestCase):
         email = "test@gmail.com"
 
         c = Client()
-        response = c.post(reverse('signup'), {'username': username,
-                                       'email': email,
-                                       'password': password,
-                                       'password_again': password})
+        response = c.post(reverse('signup'), {'username': username, 'email': email,
+                                              'password': password, 'password_again': password})
         self.assertEqual(response.status_code, HTTP_OK)
         login_result = c.login(username=username, password=password)
         self.assertTrue(login_result)
@@ -62,10 +60,8 @@ class TestProfileViews(TestCase):
         email = "email"
 
         c = Client()
-        response = c.post(reverse('signup'), {'username': username,
-                                       'email': email,
-                                       'password': password,
-                                       'password_again': password})
+        response = c.post(reverse('signup'), {'username': username, 'email': email,
+                                              'password': password, 'password_again': password})
         self.assertEqual(response.status_code, HTTP_BAD_REQUEST)
 
     def test_settings_view_with_correct_values(self):
@@ -74,9 +70,8 @@ class TestProfileViews(TestCase):
         new_email = "xxx@xxx.ru"
         new_password = "456456456456"
 
-        response = c.post(reverse('settings'), {'email': new_email,
-                                         'password': new_password,
-                                         'password_again': new_password })
+        response = c.post(reverse('settings'), {'email': new_email, 'password': new_password,
+                                                'password_again': new_password})
         self.assertEqual(response.status_code, HTTP_OK)
 
         c.logout()
@@ -91,8 +86,6 @@ class TestProfileViews(TestCase):
         new_email = "email"
         new_password = "123"*100
 
-        response = c.post(reverse('settings'), {'email': new_email,
-                                         'password': new_password,
-                                         'password_again': new_password})
+        response = c.post(reverse('settings'), {'email': new_email, 'password': new_password,
+                                                'password_again': new_password})
         self.assertEqual(response.status_code, HTTP_BAD_REQUEST)
-

@@ -13,3 +13,6 @@ urlpatterns = [
     path(r'hot_questions/', views.main_view, {'order': 'hot_questions'}, name="mainpage_hot_questions"),
     path(r'', views.main_view, name="mainpage"),
     ]
+
+handler404 = 'Hasker.profile.views.handler404'
+handler500 = 'Hasker.profile.views.handler500'

@@ -1,0 +1,59 @@
+.no_link_behaviour a:link, a:visited, a:active{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.no_link_behaviour a:hover{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.no_link_behaviour a:focus{
+    outline: 0px solid transparent;
+}
+
+.pagination {
+    font-size: 0.75rem;
+}
+
+.pagination_step_links {
+
+}
+
+.pagination_current {
+
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+@keyframes fadeOut {
+    100% {
+        /* display: none; */
+        opacity: 0;
+    }
+    0% {
+        /* display: block; */
+        opacity: 1;
+    }
+}
+
+.failed_animation {
+    margin: 20px auto 0;
+    width: 300px;
+    text-align: justify;
+    color: red;
+    -webkit-animation: 5s ease 0s normal forwards 1 fadeOut;
+    animation: 5s ease 0s normal forwards 1 fadeOut;
+}
+
+.img-thumbnail
+{
+    width: 50px;
+}
