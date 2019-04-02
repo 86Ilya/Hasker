@@ -25,8 +25,8 @@ class TestProfileModel(TestCase):
         self.assertTrue(c.login(username=username, password=password))
 
     def test_hasker_user_model_with_incorrect_values(self):
-        username = "user"*100
-        password = "123"*100
+        username = "user" * 100
+        password = "123" * 100
         email = "email"
 
         new_user = HaskerUser(username=username, email=email, password=password)

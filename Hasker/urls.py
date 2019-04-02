@@ -5,13 +5,14 @@ from django.conf.urls.static import static
 
 try:
     from Hasker.local_settings import DEBUG
-except ImportError as error:
+except ImportError:
     from Hasker.settings import DEBUG
 
 
 urlpatterns = [
     path('', include('Hasker.profile.urls')),
     path('', include('Hasker.hasker.urls')),
+    path('', include('Hasker.api.urls')),
     path('admin/', admin.site.urls),
 ]
 if DEBUG:

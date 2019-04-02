@@ -12,7 +12,7 @@ urlpatterns = [
     re_path(r'^answer(?P<answer_id>(\d*))/(?P<star>(add_star|remove_star))', views.answer_star, name="answer_star"),
     path(r'hot_questions/', views.main_view, {'order': 'hot_questions'}, name="mainpage_hot_questions"),
     path(r'', views.main_view, name="mainpage"),
-    ]
+]
 
 handler404 = 'Hasker.profile.views.handler404'
 handler500 = 'Hasker.profile.views.handler500'

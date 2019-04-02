@@ -47,7 +47,7 @@ class TestHaskerForms(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_answer_form_with_incorrect_values(self):
-        content = 't'*1025
+        content = 't' * 1025
 
         form_data = {
             'content': content,

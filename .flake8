@@ -1,4 +1,5 @@
 [flake8]
+ignore = W605
 exclude = .git,__pycache__, Hasker/hasker/migrations/, Hasker/profile/migrations/
 max-complexity = 10
 max-line-length = 120

@@ -24,6 +24,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+
+    'rest_framework.authtoken',
+    'rest_framework_swagger',
+
     'Hasker.profile',
     'Hasker.hasker',
 ]
@@ -37,6 +41,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 ROOT_URLCONF = 'Hasker.urls'
 TEMPLATE_DIR = os.path.join(BASE_DIR, "Hasker/templates")

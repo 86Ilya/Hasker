@@ -55,8 +55,8 @@ class TestProfileViews(TestCase):
         self.assertTrue(login_result)
 
     def test_signup_view_with_incorrect_values(self):
-        username = "user"*100
-        password = "123"*100
+        username = "user" * 100
+        password = "123" * 100
         email = "email"
 
         c = Client()
@@ -84,7 +84,7 @@ class TestProfileViews(TestCase):
         c = Client()
         c.login(username=self.username, password=self.password)
         new_email = "email"
-        new_password = "123"*100
+        new_password = "123" * 100
 
         response = c.post(reverse('settings'), {'email': new_email, 'password': new_password,
                                                 'password_again': new_password})

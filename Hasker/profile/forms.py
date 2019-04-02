@@ -68,7 +68,6 @@ class HaskerUserSettingsForm(HaskerUserForm):
         non_empty_data = dict()
         for key, value in cleaned_data.items():
             if value:
-                print(key, value)
                 non_empty_data.update({key: value})
 
         return non_empty_data

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
-from Hasker.hasker.models import Question, Answer, Tag
+from Hasker.hasker.models import Question, Answer
 from Hasker.profile.models import HaskerUser
 
 
@@ -19,11 +19,11 @@ class TestHaskerModels(TestCase):
         user3.save()
 
         # create question
-        question = Question(header="main question", content="abc"*64, author=user1)
+        question = Question(header="main question", content="abc" * 64, author=user1)
         question.save()
 
         # create answers
-        answer1 = Answer(content="zxc"*64, author=user2, question=question)
+        answer1 = Answer(content="zxc" * 64, author=user2, question=question)
         answer1.save()
         answer1.likes.add(user2)
         answer1.save()
@@ -40,8 +40,8 @@ class TestHaskerModels(TestCase):
         self.assertEquals(question_from_db.content, content)
 
     def test_question_with_incorrect_values(self):
-        header = 'q'*257
-        content = 'c'*1025
+        header = 'q' * 257
+        content = 'c' * 1025
         user1 = HaskerUser.objects.get(username="test1")
         question = Question(header=header, content=content, author=user1)
         self.assertRaises(ValidationError, question.full_clean)
@@ -63,7 +63,7 @@ class TestHaskerModels(TestCase):
 
     def test_answer_with_incorrect_values(self):
         user1 = HaskerUser.objects.get(username="test1")
-        content = "c"*1025
+        content = "c" * 1025
         question = Question.objects.get(header="main question")
 
         answer = Answer(content=content, author=user1, question=question)

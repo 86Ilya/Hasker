@@ -1,6 +1,7 @@
 .env
 .idea
-helpers
+projects_helpers
 *pyc
 __pycache__
 local_settings.py
+media

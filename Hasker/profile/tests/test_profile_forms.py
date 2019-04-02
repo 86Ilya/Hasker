@@ -35,8 +35,8 @@ class TestProfileForms(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_hasker_user_form_with_incorrect_values(self):
-        username = "user"*100
-        password = "123"*100
+        username = "user" * 100
+        password = "123" * 100
         email = "email"
         avatar = {'avatar': SimpleUploadedFile('avatar.jpeg', b'xxx')}
 
@@ -75,7 +75,7 @@ class TestProfileForms(TestCase):
 
     def test_hasker_user_settings_form_with_incorrect_values(self):
         username = "user"
-        password = "123"*100
+        password = "123" * 100
         email = "email"
         avatar = {'avatar': SimpleUploadedFile('avatar.jpeg', b'xxx')}
 

@@ -8,6 +8,9 @@ from Hasker.hasker.mixin import LikesMixin
 class Tag(models.Model):
     tag_name = models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.tag_name
+
 
 class Question(LikesMixin, models.Model):
     header = models.CharField(max_length=256)

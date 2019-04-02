@@ -36,14 +36,14 @@ class TestHaskerViews(TestCase):
 
         # create question
         for i in range(3):
-            question = Question(header="question"+str(i), content="abc"*64, author=user1)
+            question = Question(header="question" + str(i), content="abc" * 64, author=user1)
             question.save()
 
             # add tag
             tag = Tag.objects.get(tag_name=cls.tag_names_list[i])
             question.tags.add(tag)
             # create answer
-            answer = Answer(content="zxc"*64, author=user2, question=question)
+            answer = Answer(content="zxc" * 64, author=user2, question=question)
             answer.save()
             answer.likes.add(user2)
             answer.save()
@@ -70,7 +70,7 @@ class TestHaskerViews(TestCase):
 
     def test_search_view_with_incorrect_values(self):
         c = Client()
-        response = c.get(reverse("search", kwargs={'query': 'a'*1025}))
+        response = c.get(reverse("search", kwargs={'query': 'a' * 1025}))
         self.assertEqual(response.status_code, HTTP_BAD_REQUEST)
 
     def test_search_by_tag_view_with_correct_values(self):
@@ -114,8 +114,8 @@ class TestHaskerViews(TestCase):
         c = Client()
         c.login(username=self.username1, password=self.password1)
         ask_question_data = {
-            'header': 'n'*1025,
-            'content': 't'*1025,
+            'header': 'n' * 1025,
+            'content': 't' * 1025,
         }
         response = c.post(reverse('ask'), ask_question_data, follow=True)
 
@@ -123,7 +123,7 @@ class TestHaskerViews(TestCase):
 
     def test_question_view(self):
         header = 'testing question view'
-        content = 'a'*100
+        content = 'a' * 100
         c = Client()
         user = HaskerUser.objects.get(username=self.username1)
         question = Question(header=header, content=content, author=user)
@@ -135,14 +135,14 @@ class TestHaskerViews(TestCase):
 
     def test_question_view_add_correct_answer(self):
         header = 'testing question view add correct answer'
-        content = 'a'*100
+        content = 'a' * 100
         c = Client()
         user = HaskerUser.objects.get(username=self.username1)
         question = Question(header=header, content=content, author=user)
         question.save()
 
         c.login(username=self.username1, password=self.password1)
-        answer_data = {'content': 'z'*100}
+        answer_data = {'content': 'z' * 100}
         response = c.post(reverse('question', kwargs={"question_id": question.id}), answer_data, follow=True)
         answer_from_db = Answer.objects.get(content=answer_data['content'])
 
@@ -154,14 +154,14 @@ class TestHaskerViews(TestCase):
 
     def test_question_view_add_incorrect_answer(self):
         header = 'testing question view add incorrect answer'
-        question_content = 'a'*100
+        question_content = 'a' * 100
         c = Client()
         user = HaskerUser.objects.get(username=self.username1)
         question = Question(header=header, content=question_content, author=user)
         question.save()
 
         c.login(username=self.username1, password=self.password1)
-        answer_data = {'content': 'z'*1025}
+        answer_data = {'content': 'z' * 1025}
         response = c.post(reverse('question', kwargs={"question_id": question.id}), answer_data, follow=True)
         self.assertEqual(response.status_code, HTTP_BAD_REQUEST)
 
@@ -171,7 +171,7 @@ class TestHaskerViews(TestCase):
 
     def test_question_vote(self):
         header = 'testing question vote'
-        question_content = 'a'*100
+        question_content = 'a' * 100
         c = Client()
         user = HaskerUser.objects.get(username=self.username1)
         user2 = HaskerUser.objects.get(username=self.username2)
@@ -186,7 +186,7 @@ class TestHaskerViews(TestCase):
 
     def test_answer_add_like(self):
         question_header = 'testing answer like'
-        question_content = 'a'*100
+        question_content = 'a' * 100
         c = Client()
         user = HaskerUser.objects.get(username=self.username1)
         user2 = HaskerUser.objects.get(username=self.username2)
@@ -194,7 +194,7 @@ class TestHaskerViews(TestCase):
         question = Question(header=question_header, content=question_content, author=user)
         question.save()
 
-        answer = Answer(content="a"*10, author=user, question=question)
+        answer = Answer(content="a" * 10, author=user, question=question)
         answer.save()
 
         c.login(username=self.username2, password=self.password2)
@@ -204,7 +204,7 @@ class TestHaskerViews(TestCase):
 
     def test_answer_add_dislike(self):
         question_header = 'testing answer dislike'
-        question_content = 'a'*100
+        question_content = 'a' * 100
         c = Client()
         user = HaskerUser.objects.get(username=self.username1)
         user2 = HaskerUser.objects.get(username=self.username2)
@@ -212,7 +212,7 @@ class TestHaskerViews(TestCase):
         question = Question(header=question_header, content=question_content, author=user)
         question.save()
 
-        answer = Answer(content="a"*10, author=user, question=question)
+        answer = Answer(content="a" * 10, author=user, question=question)
         answer.save()
 
         c.login(username=self.username2, password=self.password2)
@@ -222,7 +222,7 @@ class TestHaskerViews(TestCase):
 
     def test_answer_add_star(self):
         question_header = 'testing answer star'
-        question_content = 'a'*100
+        question_content = 'a' * 100
         c = Client()
         user = HaskerUser.objects.get(username=self.username1)
         user2 = HaskerUser.objects.get(username=self.username2)
@@ -230,7 +230,7 @@ class TestHaskerViews(TestCase):
         question = Question(header=question_header, content=question_content, author=user)
         question.save()
 
-        answer = Answer(content="a"*10, author=user2, question=question)
+        answer = Answer(content="a" * 10, author=user2, question=question)
         answer.save()
 
         c.login(username=self.username1, password=self.password1)
@@ -242,7 +242,7 @@ class TestHaskerViews(TestCase):
 
     def test_answer_remove_star(self):
         question_header = 'testing answer remove star'
-        question_content = 'a'*100
+        question_content = 'a' * 100
         c = Client()
         user = HaskerUser.objects.get(username=self.username1)
         user2 = HaskerUser.objects.get(username=self.username2)
@@ -250,7 +250,7 @@ class TestHaskerViews(TestCase):
         question = Question(header=question_header, content=question_content, author=user)
         question.save()
 
-        answer = Answer(content="a"*10, author=user2, question=question)
+        answer = Answer(content="a" * 10, author=user2, question=question)
         answer.save()
 
         c.login(username=self.username1, password=self.password1)
