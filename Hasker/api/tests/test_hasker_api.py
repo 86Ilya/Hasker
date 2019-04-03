@@ -88,10 +88,8 @@ class HaskerTests(APITestCase):
         self.assertEqual(len(content), 1)
         self.assertEqual(content[0]['header'], question.header)
         self.assertEqual(content[0]['content'], question.content)
-        # TODO id->username
-        # self.assertEqual(content[0]['author'], question.author)
-        # TODO tags->tag_name
-        # self.assertEqual(content[0]['tags'], question.tags)
+        self.assertEqual(content[0]['author'], question.author)
+        self.assertDictEqual(content[0]['tags'][0], question.tags[0])
 
     def test_search_question_by_header(self):
         client = APIClient()
@@ -105,10 +103,8 @@ class HaskerTests(APITestCase):
         self.assertEqual(len(content), 1)
         self.assertEqual(content[0]['header'], question.header)
         self.assertEqual(content[0]['content'], question.content)
-        # TODO id->username
-        # self.assertEqual(content[0]['author'], question.author)
-        # TODO tags->tag_name
-        # self.assertEqual(content[0]['tags'], question.tags)
+        self.assertEqual(content[0]['author'], question.author)
+        self.assertDictEqual(content[0]['tags'][0], question.tags[0])
 
     def test_get_question_by_id(self):
         client = APIClient()

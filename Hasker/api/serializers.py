@@ -1,5 +1,5 @@
 from Hasker.profile.models import HaskerUser
-from Hasker.hasker.models import Question, Answer
+from Hasker.hasker.models import Question, Answer, Tag
 from rest_framework import serializers
 
 
@@ -31,7 +31,15 @@ class HaskerUserUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('id', 'tag_name')
+
+
 class QuestionSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Question
@@ -39,6 +47,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class AnswerSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
 
     class Meta:
         model = Answer
