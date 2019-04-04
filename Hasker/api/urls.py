@@ -4,8 +4,7 @@ from rest_framework.authtoken import views as authviews
 from Hasker.api.views.profile_views import ProfileManageView
 from Hasker.api.views.hasker_views import QuestionListView, QuestionTrendingListView, QuestionSearchListView
 from Hasker.api.views.hasker_views import QuestionByIDView, AnswersListView
-from Hasker.api.swagger_schema import SwaggerSchemaView
-
+from Hasker.api.swagger_schema import schema_view
 
 urlpatterns = [
     path('api/v1/profile/', ProfileManageView.as_view(), name="api_profile"),
@@ -15,5 +14,5 @@ urlpatterns = [
     re_path('api/v1/question/(?P<id>\d*?)/$', QuestionByIDView.as_view(), name='question_by_id'),
     re_path('api/v1/question/(?P<id>\d*?)/answer/$', AnswersListView.as_view(), name='answers'),
     path('api/v1/auth/', authviews.obtain_auth_token, name='authenticate'),
-    path('api/v1/docs/', SwaggerSchemaView.as_view())
+    path('api/v1/docs/', schema_view)
 ]

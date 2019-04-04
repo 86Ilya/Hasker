@@ -1,19 +1,8 @@
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework_swagger import renderers
-from rest_framework.schemas import SchemaGenerator
+from rest_framework.schemas import get_schema_view
 
 
-class SwaggerSchemaView(APIView):
-    exclude_from_schema = True
-    permission_classes = [AllowAny]
-    renderer_classes = [
-        renderers.OpenAPIRenderer,
-        renderers.SwaggerUIRenderer
-    ]
-
-    def get(self, request):
-        generator = SchemaGenerator()
-        schema = generator.get_schema(request=request)
-        return Response(schema)
+schema_view = get_schema_view(title="Hasker API", public=True,
+                              renderer_classes=[renderers.OpenAPIRenderer, renderers.SwaggerUIRenderer],
+                              permission_classes=[AllowAny])

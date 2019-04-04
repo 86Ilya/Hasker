@@ -26,8 +26,15 @@ http://localhost:8000/
 python3 /opt/hasker/manage.py test
 ``` 
 
+## API
+У проекта имеется API, более подробное описание находится по следующему адресу:
+```
+http://hostname/api/v1/docs/
+```
+Где `hostname` - это имя машины с запущенным сервером Hasker
+
 ## Проект собран с использованием следующих библиотек 
 
 * [Django v2.1.7](https://www.djangoproject.com/) - Web framework
-* [Bootstrap v4.0](https://getbootstrap.com/) - Used in front-end
-* [Fontawesome v5.7.2](http://fontawesome.ru/) - Used in front-end
+* [Bootstrap v4.3.1](https://getbootstrap.com/) - Used in front-end
+* [Fontawesome v5.8.1](http://fontawesome.ru/) - Used in front-end

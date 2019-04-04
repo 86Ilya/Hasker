@@ -48,6 +48,17 @@ REST_FRAMEWORK = {
     )
 }
 
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+}
+
 ROOT_URLCONF = 'Hasker.urls'
 TEMPLATE_DIR = os.path.join(BASE_DIR, "Hasker/templates")
 TEMPLATES = [
@@ -149,7 +160,7 @@ MAX_LENGTH_SEARCH = 1024
 
 
 try:
-    from .local_settings import *
+    from .local_settings import *  # noqa: F401 F403
     print("Using local settings. Remove it in production!")
 except ImportError as error:
     print(error)
