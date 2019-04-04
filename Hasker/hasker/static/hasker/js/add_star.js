@@ -22,7 +22,6 @@ function add_star_main_func(){
         fetch(star_action, options).then(function(response){
             response.json().then(function(response_parsed){
                 if(response_parsed.result){
-                    console.log(response_parsed);
                     if(response_parsed.correct == true){
                         // find old correct answer and set it to false
                         let correct_answer_star_elem = document.querySelector(".fas.fa-star");

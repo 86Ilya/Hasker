@@ -15,6 +15,7 @@
           </fieldset>
      </form>
          <div id="pre_submit"></div>
+          <img src="" id="avatar_image" class="w-50"/>
          <div class = "btn btn-primary w-100" id="submit_button">Signup</div>
     </div>
 
@@ -25,4 +26,5 @@
 {% block scripts %}
 {% load static %}
 <script type="text/javascript" src='{% static "profile/js/prevent_password_mismatch.js" %}'></script>
+<script type="text/javascript" src='{% static "profile/js/avatar_preview.js" %}'></script>
 {% endblock %}

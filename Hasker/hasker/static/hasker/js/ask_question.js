@@ -1,9 +1,6 @@
 window.addEventListener("load", ask_question_main_func);
 
 function ask_question_main_func(){
-    // let tags_from_server = {1: 'python', 2: 'c++', 3: 'scala', 4: 'java'};
-    // console.log(document.querySelector("#tags_from_server").textContent);
-//    let tags_from_server = JSON.parse(document.querySelector("#tags_from_server").textContent);
     let tags_added_elem = document.querySelector("#tags_field__added");
     let tags_input_elem = document.querySelector("#tags_field__input");
     let tags_dropdown_content = document.querySelector(".dropdown-content");
@@ -15,11 +12,9 @@ function ask_question_main_func(){
     let tags_from_server = {};
 
     for(tag_option of tags_nonvisible_options){
-        console.log(tag_option);
         tags_from_server[tag_option.textContent] = tag_option.value;
 
     }
-    console.log(tags_from_server)
     tags_input_elem.oninput = oninput_tags_input_elem;
     tags_input_elem.onkeydown = remove_last_tag; 
     ask_button.onclick = submit_form;
@@ -38,7 +33,6 @@ function ask_question_main_func(){
         if(input_text.length == 0){
             return;
         }
-        console.log("\""+input_text+"\"");
         for (const tag_name in tags_from_server) {
             // tag_name = tags_from_server[key];
             if(tags_added_list.indexOf(tag_name) == -1 && tag_name.startsWith(input_text)){
